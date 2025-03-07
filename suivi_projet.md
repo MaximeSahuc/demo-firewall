@@ -18,4 +18,5 @@
 ## Séance du 7 mars 2025
 - Anniversaire de Marc
 - Lecture de la documentation UFW
-- Implémentation du firewall avec des règles spécifiques
+- Implémentation du firewall avec des règles spécifique
+- Recherches sur l'implémentation d'une DMZ avec Vagrant
