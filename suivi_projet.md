@@ -16,5 +16,6 @@
 - VM client : fonctionne et peut accéder au serveur web
 
 ## Séance du 7 mars 2025
+- Anniversaire de Marc
 - Lecture de la documentation UFW
 - Implémentation du firewall avec des règles spécifiques
