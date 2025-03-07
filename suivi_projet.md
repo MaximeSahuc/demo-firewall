@@ -14,3 +14,7 @@
 ## Séance du 6 mars 2025
 - VM serveur : Nginx fonctionnel et accessible
 - VM client : fonctionne et peut accéder au serveur web
+
+## Séance du 7 mars 2025
+- Lecture de la documentation UFW
+- Implémentation du firewall avec des règles spécifiques
