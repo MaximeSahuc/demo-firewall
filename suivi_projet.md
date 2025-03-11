@@ -20,3 +20,7 @@
 - Lecture de la documentation UFW
 - Implémentation du firewall avec des règles spécifique
 - Recherches sur l'implémentation d'une DMZ avec Vagrant
+
+## Séance du 11 mars 2025
+- Implémentation de la DMZ via une machinne 'firewall'
+- Rédaction de documentation
