@@ -7,6 +7,10 @@ Vagrant.configure("2") do |config|
     config.vm.network "private_network", 
         ip: "192.168.57.30", device: "eth2", netmask: "24"
     
+    # Copie le script de test des flux réseaux
+    config.vm.provision "file", source: "provision/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+    
+    config.vm.provision "shell", path: "provision/install_tools.sh"
     config.vm.provision "shell", path: "provision/setup_ufw.sh"
     config.vm.provision "shell", path: "provision/routing.sh"
 

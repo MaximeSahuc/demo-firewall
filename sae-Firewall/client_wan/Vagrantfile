@@ -6,6 +6,11 @@ Vagrant.configure("2") do |config|
         ip: "192.168.57.10",
         netmask: "24"
     
+    # Copie le script de test des flux réseaux
+    config.vm.provision "file", source: "provision/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+    
+    config.vm.provision "shell", path: "provision/install_tools.sh"
+    
     config.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
     end
