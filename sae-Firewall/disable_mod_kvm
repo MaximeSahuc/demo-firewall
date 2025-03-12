@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sudo rmmod kvm_amd
+sudo rmmod kvm
