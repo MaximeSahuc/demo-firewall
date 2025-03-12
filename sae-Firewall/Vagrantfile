@@ -33,6 +33,7 @@ Vagrant.configure("2") do |config|
     
         client_wan.vm.provision "file", source: "provision/shared-scripts/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
         client_wan.vm.provision "shell", path: "provision/shared-scripts/install_tools.sh"
+        client_wan.vm.provision "shell", path: "provision/client-wan/install_nginx.sh"
     
         client_wan.vm.provision "shell", inline: <<-SHELL
             if ! ip route show | grep -q "192.168.56.0/24 via 192.168.57.30"; then
