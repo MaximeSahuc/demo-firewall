@@ -24,3 +24,10 @@
 ## Séance du 11 mars 2025
 - Implémentation de la DMZ via une machinne 'firewall'
 - Rédaction de documentation
+
+## Séance du 12 mars 2025
+- Implémentation de la DMZ via la machinne 'firewall'
+- Rédaction de documentation
+- Rédaction protocole de test des flux réseaux
+- Script de lancement de VMs
+- Script de tests automatisés des flux réseaux

@@ -19,11 +19,10 @@
     - Installer UFW sur la VM serveur.
     - Définir manuellement les règles de base (par exemple, autoriser le trafic HTTP/HTTPS, éventuellement SSH) et activer le firewall.
 
-7. OK - Tests de filtrage par UFW
-    - Réaliser des tests manuels depuis la VM client (utiliser curl, ping, nmap, etc.) pour comparer le comportement avant et après l’activation d’UFW.
-    - Vérifier que les connexions légitimes passent et que les connexions non autorisées sont bloquées.
+7. Implémentation d'une DMZ avec les règles réseaux Vagrant
 
-8. Implémentation d'une DMZ avec les règles réseaux Vagrant
+8. Tests de filtrage par UFW
+    - Réaliser un script pour chaque machine qui effectuera un test pour vérifier les flux autorisés et bloqués.
 
 9. Documentation et validation finale
     - Consigner toutes les étapes, commandes et résultats dans un journal de bord (traces et logs).
