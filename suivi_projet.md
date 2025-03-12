@@ -20,3 +20,4 @@
 - Lecture de la documentation UFW
 - Implémentation du firewall avec des règles spécifique
 - Recherches sur l'implémentation d'une DMZ avec Vagrant
+- Erreurs VirtualBox (low memory) tandis que la RAM n'était pas pleine, fix: echo 3 > /proc/sys/vm/drop_caches

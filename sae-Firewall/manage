@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# Configuration
+VM_CLIENT="client"
+VM_CLIENT_WAN="client_wan"
+VM_SERVER="server"
+VM_FIREWALL="firewall"
+
+help() {
+  echo "Usage: $0 [help|start_vm|destroy_vm|start_all|destroy_all]"
+  echo ""
+  echo "Commands:"
+  echo "  help        Display this help message."
+  echo "  start_vm    Start a specific VM. (VM_DIR must be set)"
+  echo "  destroy_vm  Destroy a specific VM. (VM_DIR must be set)"
+  echo "  start_all   Start all VMs."
+  echo "  provision_all   Provision all VMs."
+  echo "  destroy_all Destroy all VMs."
+}
+
+check_root() {
+  if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 1
+  fi
+}
+
+start_vm() {
+  if [[ -z "$VM_DIR" ]]; then
+    echo "VM_DIR must be set. Example: VM_DIR=client $0 start_vm"
+    return 1
+  fi
+
+  check_root
+  echo "Starting VM: $VM_DIR"
+  pushd "$VM_DIR" > /dev/null 2>&1 || { echo "Directory $VM_DIR not found"; return 1; }
+  rmmod kvm_amd > /dev/null 2>&1  # Disable KVM module because: Stderr: VBoxManage: error: VirtualBox can't enable the AMD-V extension. Please disable the KVM kernel extension, recompile your kernel and reboot (VERR_SVM_IN_USE)
+  rmmod kvm > /dev/null 2>&1
+  vagrant up --provider=virtualbox
+  popd > /dev/null 2>&1
+}
+
+provision_vm() {
+  if [[ -z "$VM_DIR" ]]; then
+    echo "VM_DIR must be set. Example: VM_DIR=client $0 start_vm"
+    return 1
+  fi
+
+  check_root
+  echo "Starting VM: $VM_DIR"
+  pushd "$VM_DIR" > /dev/null 2>&1 || { echo "Directory $VM_DIR not found"; return 1; }
+  vagrant provision
+  popd > /dev/null 2>&1
+}
+
+destroy_vm() {
+  if [[ -z "$VM_DIR" ]]; then
+    echo "VM_DIR must be set. Example: VM_DIR=client $0 destroy_vm"
+    return 1
+  fi
+
+  check_root
+  echo "Destroying VM: $VM_DIR"
+  pushd "$VM_DIR" > /dev/null 2>&1 || { echo "Directory $VM_DIR not found"; return 1; }
+  vagrant destroy -f
+  popd > /dev/null 2>&1
+}
+
+start_all() {
+  check_root
+  echo "Starting all VMs..."
+  VM_DIR="$VM_CLIENT" start_vm
+  VM_DIR="$VM_CLIENT_WAN" start_vm
+  VM_DIR="$VM_SERVER" start_vm
+  VM_DIR="$VM_FIREWALL" start_vm
+}
+
+provision_all() {
+  check_root
+  echo "Provisionning all VMs..."
+  VM_DIR="$VM_CLIENT" provision_vm
+  VM_DIR="$VM_CLIENT_WAN" provision_vm
+  VM_DIR="$VM_SERVER" provision_vm
+  VM_DIR="$VM_FIREWALL" provision_vm
+}
+
+
+destroy_all() {
+  check_root
+  echo "Destroying all VMs..."
+  VM_DIR="$VM_CLIENT" destroy_vm
+  VM_DIR="$VM_CLIENT_WAN" destroy_vm
+  VM_DIR="$VM_SERVER" destroy_vm
+  VM_DIR="$VM_FIREWALL" destroy_vm
+}
+
+# Main script logic
+case "$1" in
+  help)
+    help
+    ;;
+  start_vm)
+    start_vm
+    ;;
+  destroy_vm)
+    destroy_vm
+    ;;
+  start_all)
+    start_all
+    ;;
+  provision_all)
+    provision_all
+    ;;
+  destroy_all)
+    destroy_all
+    ;;
+  *)
+    help
+    exit 1
+    ;;
+esac

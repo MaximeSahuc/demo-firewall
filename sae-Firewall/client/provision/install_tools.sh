@@ -1,0 +1,1 @@
+sudo apt update && sudo apt install -yy curl tree vim
