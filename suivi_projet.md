@@ -31,3 +31,9 @@
 - Rédaction protocole de test des flux réseaux
 - Script de lancement de VMs
 - Script de tests automatisés des flux réseaux
+- Merger les vagrantfile
+
+## Séance du 13 mars 2025
+TODO - Script de tests automatisés des flux réseaux
+TODO - Configuration firewall
+TODO - Test comparaison avec vs sans firewall
