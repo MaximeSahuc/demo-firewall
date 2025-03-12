@@ -59,7 +59,7 @@ HOSTNAME=$(hostname)
 
 # Tests spécifiques en fonction du hostname
 case "$HOSTNAME" in
-  "client-lan")
+  "client")
     test_ping "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"
     test_wan
