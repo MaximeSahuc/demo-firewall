@@ -2,9 +2,9 @@ Vagrant.configure("2") do |config|
     config.vm.box = "debian/bookworm64"
     config.vm.hostname = "firewall"
     
-    config.vm.network "private_network", 
+    config.vm.network "private_network", virtualbox__intnet: "net-56",
         ip: "192.168.56.30", device: "eth1", netmask: "24"
-    config.vm.network "private_network", 
+    config.vm.network "private_network", virtualbox__intnet: "net-57",
         ip: "192.168.57.30", device: "eth2", netmask: "24"
     
     # Copie le script de test des flux réseaux
