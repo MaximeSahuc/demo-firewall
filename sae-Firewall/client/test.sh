@@ -65,11 +65,26 @@ case "$HOSTNAME" in
     test_wan
     ;;
   "client-wan")
+    if test_ping "$CLIENT_LAN_IP"; then
+        echo -e "${GREEN}Test ping $CLIENT_LAN_IP KO (normal)${NC}"
+    else
+        echo -e "${RED}Test ping $CLIENT_LAN_IP OK (devrait échouer)${NC}"
+    fi
+
+    if test_ssh "$CLIENT_LAN_IP"; then
+        echo -e "${GREEN}Test SSH $CLIENT_LAN_IP KO (normal)${NC}"
+    else
+        echo -e "${RED}Test SSH $CLIENT_LAN_IP OK (devrait échouer)${NC}"
+    fi
+
+    if test_ssh "$SERVEUR_IP"; then
+        echo -e "${GREEN}Test SSH $SERVEUR_IP KO (normal)${NC}"
+    else
+        echo -e "${RED}Test SSH $SERVEUR_IP OK (devrait échouer)${NC}"
+    fi
+
     test_ping "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"
-    test_ping "$CLIENT_LAN_IP" # Devrait échouer
-    test_ssh "$CLIENT_LAN_IP" # Devrait échouer
-    test_ssh "$SERVEUR_IP" # Devrait échouer
     ;;
   "firewall")
     test_ping "$SERVEUR_IP"
