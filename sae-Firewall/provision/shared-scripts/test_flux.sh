@@ -45,7 +45,7 @@ test_ssh() {
 
 # Fonction pour tester l'accès WAN (ping vers une adresse externe)
 test_wan() {
-  if ping -c 1 $CLIENT_WAN_IP > /dev/null 2>&1; then
+  if ping -W 5 -c 1 $CLIENT_WAN_IP > /dev/null 2>&1; then
     echo -e "${GREEN}Test accès WAN OK${NC}"
     return 0
   else
@@ -62,6 +62,7 @@ case "$HOSTNAME" in
   "client-lan")
     test_ping "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"
+    test_ssh "$SERVEUR_IP"
     test_wan
     ;;
   "client-wan")
