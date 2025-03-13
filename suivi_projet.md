@@ -25,3 +25,21 @@
 ## Séance du 10 mars 2025
 - Début de mise en place d'une DMZ en utilisant une VM spécifique
 - Documentation
+
+## Séance du 11 mars 2025
+- Implémentation de la DMZ via une machinne 'firewall'
+- Rédaction de documentation
+
+## Séance du 12 mars 2025
+- Implémentation de la DMZ via la machinne 'firewall'
+- Rédaction de documentation
+- Rédaction protocole de test des flux réseaux
+- Script de lancement de VMs
+- Script de tests automatisés des flux réseaux
+- Merger les vagrantfile
+
+## Séance du 13 mars 2025
+- Script de tests automatisés des flux réseaux
+- Configuration firewall
+- Test comparaison avec vs sans firewall
+- Diapo
