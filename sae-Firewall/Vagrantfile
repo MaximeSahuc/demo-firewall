@@ -1,0 +1,93 @@
+Vagrant.configure("2") do |config|
+    # VM Client LAN
+    config.vm.define :client_lan do |client_lan|
+        client_lan.vm.box = "debian/bookworm64"
+        client_lan.vm.hostname = "client-lan"
+    
+        client_lan.vm.network "private_network", virtualbox__intnet: "net-56",
+            ip: "192.168.56.10",
+            netmask: "24"
+    
+        client_lan.vm.provision "file", source: "provision/shared-scripts/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+        client_lan.vm.provision "shell", path: "provision/shared-scripts/install_tools.sh"
+    
+        client_lan.vm.provider "virtualbox" do |vb|
+            vb.memory = "256"
+        end
+    
+        client_lan.vm.provision "shell", inline: <<-SHELL
+            if ! ip route show | grep -q "192.168.57.0/24 via 192.168.56.30"; then
+                ip route add 192.168.57.0/24 via 192.168.56.30
+            fi
+        SHELL
+    end
+  
+    # VM Client WAN
+    config.vm.define :client_wan do |client_wan|
+        client_wan.vm.box = "debian/bookworm64"
+        client_wan.vm.hostname = "client-wan"
+    
+        client_wan.vm.network "private_network", virtualbox__intnet: "net-57",
+            ip: "192.168.57.10",
+            netmask: "24"
+    
+        client_wan.vm.provision "file", source: "provision/shared-scripts/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+        client_wan.vm.provision "shell", path: "provision/shared-scripts/install_tools.sh"
+        client_wan.vm.provision "shell", path: "provision/client-wan/install_nginx.sh"
+    
+        client_wan.vm.provision "shell", inline: <<-SHELL
+            if ! ip route show | grep -q "192.168.56.0/24 via 192.168.57.30"; then
+                ip route add 192.168.56.0/24 via 192.168.57.30
+            fi
+        SHELL
+    
+        client_wan.vm.provider "virtualbox" do |vb|
+            vb.memory = "256"
+        end
+    end
+  
+    # VM Firewall
+    config.vm.define :firewall do |firewall|
+        firewall.vm.box = "debian/bookworm64"
+        firewall.vm.hostname = "firewall"
+    
+        firewall.vm.network "private_network", virtualbox__intnet: "net-56",
+            ip: "192.168.56.30", device: "eth1", netmask: "24"
+        firewall.vm.network "private_network", virtualbox__intnet: "net-57",
+            ip: "192.168.57.30", device: "eth2", netmask: "24"
+    
+        firewall.vm.provision "file", source: "provision/shared-scripts/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+        firewall.vm.provision "shell", path: "provision/shared-scripts/install_tools.sh"
+        firewall.vm.provision "shell", path: "provision/firewall/setup_ufw.sh"
+        firewall.vm.provision "shell", path: "provision/firewall/routing.sh"
+    
+        firewall.vm.provider "virtualbox" do |vb|
+            vb.memory = "256"
+        end
+    end
+  
+    # VM Serveur
+    config.vm.define :serveur do |serveur|
+        serveur.vm.box = "debian/bookworm64"
+        serveur.vm.hostname = "serveur"
+    
+        serveur.vm.network "private_network", virtualbox__intnet: "net-56",
+            ip: "192.168.56.20", netmask: "24"
+    
+        serveur.vm.provision "file", source: "provision/shared-scripts/test_flux.sh", destination: "/home/vagrant/test_flux.sh"
+        serveur.vm.provision "shell", path: "provision/shared-scripts/install_tools.sh"
+        serveur.vm.provision "shell", path: "provision/serveur/install_nginx.sh"
+        serveur.vm.provision "shell", path: "provision/serveur/setup_ufw.sh"
+        serveur.vm.provision "shell", path: "provision/serveur/routing.sh"
+    
+        serveur.vm.provision "shell", inline: <<-SHELL
+            if ! ip route show | grep -q "192.168.57.0/24 via 192.168.56.30"; then
+                ip route add 192.168.57.0/24 via 192.168.56.30
+            fi
+        SHELL
+    
+        serveur.vm.provider "virtualbox" do |vb|
+            vb.memory = "256"
+        end
+    end
+end

@@ -11,4 +11,5 @@ sudo ufw default allow outgoing
 sudo ufw allow "OpenSSH"
 
 # Enable Nginx profile (allow 80:433)
-sudo ufw allow "Nginx HTTP"
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
