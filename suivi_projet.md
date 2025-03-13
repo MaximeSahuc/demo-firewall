@@ -21,3 +21,7 @@
 - Implémentation du firewall avec des règles spécifique
 - Recherches sur l'implémentation d'une DMZ avec Vagrant
 - Erreurs VirtualBox (low memory) tandis que la RAM n'était pas pleine, fix: echo 3 > /proc/sys/vm/drop_caches
+
+## Séance du 10 mars 2025
+- Début de mise en place d'une DMZ en utilisant une VM spécifique
+- Documentation
