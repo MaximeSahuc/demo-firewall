@@ -3,6 +3,7 @@
 # Couleurs pour l'affichage
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Adresses IP des serveurs
@@ -13,10 +14,10 @@ CLIENT_WAN_IP="192.168.57.10"
 # Fonction pour tester le ping
 test_ping() {
   if ping -W 5 -c 1 "$1" > /dev/null 2>&1; then
-    echo -e "${GREEN}Test ping $1 OK${NC}"
+    echo -e "  Ping vers $1 ${GREEN}OK${NC}"
     return 0
   else
-    echo -e "${RED}Test ping $1 KO${NC}"
+    echo -e "  Ping vers $1 ${RED}KO${NC}"
     return 1
   fi
 }
@@ -24,10 +25,10 @@ test_ping() {
 # Fonction pour tester curl
 test_curl() {
   if curl -s --connect-timeout 5 --head "http://$1" > /dev/null 2>&1; then
-    echo -e "${GREEN}Test curl http://$1 OK${NC}"
+    echo -e "  Accès serveur web http://$1 ${GREEN}OK${NC}"
     return 0
   else
-    echo -e "${RED}Test curl http://$1 KO${NC}"
+    echo -e "  Accès serveur web http://$1 ${RED}KO${NC}"
     return 1
   fi
 }
@@ -35,23 +36,19 @@ test_curl() {
 # Fonction pour tester SSH
 test_ssh() {
   if timeout 0.5 bash -c "</dev/tcp/$1/22" >/dev/null 2>&1; then
-    echo -e "${GREEN}Test SSH $1 OK${NC}"
+    echo -e "  Accès SSH sur $1 ${GREEN}OK${NC}"
     return 0
   else
-    echo -e "${RED}Test SSH $1 KO${NC}"
+    echo -e "  Accès SSH sur $1 ${RED}KO${NC}"
     return 1
   fi
 }
 
-# Fonction pour tester l'accès WAN (ping vers une adresse externe)
 test_wan() {
-  if ping -W 5 -c 1 $CLIENT_WAN_IP > /dev/null 2>&1; then
-    echo -e "${GREEN}Test accès WAN OK${NC}"
-    return 0
-  else
-    echo -e "${RED}Test accès WAN KO${NC}"
-    return 1
-  fi
+  echo -e "${BLUE}Test de connectivité vers 'Client WAN (serveur web)'${NC}"
+  test_ping "$CLIENT_WAN_IP"
+  test_ssh "$CLIENT_WAN_IP"
+  test_curl "$CLIENT_WAN_IP"
 }
 
 # Déterminer le hostname
@@ -60,25 +57,43 @@ HOSTNAME=$(hostname)
 # Tests spécifiques en fonction du hostname
 case "$HOSTNAME" in
   "client-lan")
+    echo -e "${BLUE}Test de connectivité vers 'Serveur'${NC}"
     test_ping "$SERVEUR_IP"
-    test_curl "$SERVEUR_IP"
     test_ssh "$SERVEUR_IP"
-    test_wan
+    test_curl "$SERVEUR_IP"
+    # Test WAN access
+    test_wan    
     ;;
   "client-wan")
+    # Test Client LAN access
+    echo -e "${BLUE}Test de connectivité vers 'Client LAN'${NC}"
     test_ping "$CLIENT_LAN_IP"
     test_ssh "$CLIENT_LAN_IP"
-    test_ssh "$SERVEUR_IP"
+    # Test Server access
+    echo -e "${BLUE}Test de connectivité vers 'Serveur'${NC}"
     test_ping "$SERVEUR_IP"
+    test_ssh "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"
     ;;
   "firewall")
-    test_ping "$SERVEUR_IP"
+    # Test Client LAN access
+    echo -e "${BLUE}Test de connectivité vers 'Client LAN'${NC}"
     test_ping "$CLIENT_LAN_IP"
+    test_ssh "$CLIENT_LAN_IP"
+    # Test Server access
+    echo -e "${BLUE}Test de connectivité vers 'Serveur'${NC}"
+    test_ping "$SERVEUR_IP"
+    test_ssh "$SERVEUR_IP"
+    test_curl "$SERVEUR_IP"
+    # Test WAN access
     test_wan
     ;;
   "serveur")
+    # Test Client LAN access
+    echo -e "${BLUE}Test de connectivité vers 'Client LAN'${NC}"
     test_ping "$CLIENT_LAN_IP"
+    test_ssh "$CLIENT_LAN_IP"
+    # Test WAN access
     test_wan
     ;;
   *)

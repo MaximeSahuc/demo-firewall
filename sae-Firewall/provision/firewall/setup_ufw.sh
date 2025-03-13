@@ -25,3 +25,6 @@ sudo ufw route allow in on eth1 to any
 
 # Reload UFW
 sudo ufw reload
+# Enable UFW at start
+sudo systemctl start ufw
+sudo systemctl enable ufw
