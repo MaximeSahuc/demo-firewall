@@ -13,8 +13,7 @@ sudo ufw default deny incoming
 sudo ufw default deny outgoing
 sudo ufw default deny routed
 
-
-#Allow Host/VM trafic
+# Allow Host/VM trafic
 sudo ufw allow in on eth0 proto tcp to any port 22
 
 # Allow all routed traffic to web server
@@ -25,3 +24,6 @@ sudo ufw route allow in on eth1 to any
 
 # Reload UFW
 sudo ufw reload
+# Enable UFW at start
+sudo systemctl start ufw
+sudo systemctl enable ufw
