@@ -14,10 +14,10 @@ CLIENT_WAN_IP="192.168.57.10"
 # Fonction pour tester le ping
 test_ping() {
   if ping -W 5 -c 1 "$1" > /dev/null 2>&1; then
-    echo -e "  Ping vers $1 ${GREEN}OK${NC}"
+    echo -e "  ${GREEN}Ping vers $1 OK${NC}"
     return 0
   else
-    echo -e "  Ping vers $1 ${RED}KO${NC}"
+    echo -e "  ${RED}Ping vers $1 KO${NC}"
     return 1
   fi
 }
@@ -25,10 +25,10 @@ test_ping() {
 # Fonction pour tester curl
 test_curl() {
   if curl -s --connect-timeout 5 --head "http://$1" > /dev/null 2>&1; then
-    echo -e "  Accès serveur web http://$1 ${GREEN}OK${NC}"
+    echo -e "  ${GREEN}Accès serveur web http://$1 OK${NC}"
     return 0
   else
-    echo -e "  Accès serveur web http://$1 ${RED}KO${NC}"
+    echo -e "  ${RED}Accès serveur web http://$1 KO${NC}"
     return 1
   fi
 }
@@ -36,16 +36,16 @@ test_curl() {
 # Fonction pour tester SSH
 test_ssh() {
   if timeout 0.5 bash -c "</dev/tcp/$1/22" >/dev/null 2>&1; then
-    echo -e "  Accès SSH sur $1 ${GREEN}OK${NC}"
+    echo -e "  ${GREEN}Accès SSH sur $1 OK${NC}"
     return 0
   else
-    echo -e "  Accès SSH sur $1 ${RED}KO${NC}"
+    echo -e "  ${RED}Accès SSH sur $1 KO${NC}"
     return 1
   fi
 }
 
 test_wan() {
-  echo -e "${BLUE}Test de connectivité vers 'Client WAN (serveur web)'${NC}"
+  echo -e "\n${BLUE}Test de connectivité vers 'Client WAN (serveur web)'${NC}"
   test_ping "$CLIENT_WAN_IP"
   test_ssh "$CLIENT_WAN_IP"
   test_curl "$CLIENT_WAN_IP"
@@ -70,7 +70,7 @@ case "$HOSTNAME" in
     test_ping "$CLIENT_LAN_IP"
     test_ssh "$CLIENT_LAN_IP"
     # Test Server access
-    echo -e "${BLUE}Test de connectivité vers 'Serveur'${NC}"
+    echo -e "\n${BLUE}Test de connectivité vers 'Serveur'${NC}"
     test_ping "$SERVEUR_IP"
     test_ssh "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"
@@ -81,7 +81,7 @@ case "$HOSTNAME" in
     test_ping "$CLIENT_LAN_IP"
     test_ssh "$CLIENT_LAN_IP"
     # Test Server access
-    echo -e "${BLUE}Test de connectivité vers 'Serveur'${NC}"
+    echo -e "\n${BLUE}Test de connectivité vers 'Serveur'${NC}"
     test_ping "$SERVEUR_IP"
     test_ssh "$SERVEUR_IP"
     test_curl "$SERVEUR_IP"

@@ -13,8 +13,7 @@ sudo ufw default deny incoming
 sudo ufw default deny outgoing
 sudo ufw default deny routed
 
-
-#Allow Host/VM trafic
+# Allow Host/VM trafic
 sudo ufw allow in on eth0 proto tcp to any port 22
 
 # Allow all routed traffic to web server
